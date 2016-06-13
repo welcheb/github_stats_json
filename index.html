@@ -1,1 +1,102 @@
-My Page
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+        <title>Welch Lab Reproducible Research</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" href="contrib/tablesorter-master/css/jq.css" type="text/css" media="print, projection, screen" />
+      	<link rel="stylesheet" href="contrib/tablesorter-master/themes/blue/style.css" type="text/css" media="print, projection, screen" />
+      	<script type="text/javascript" src="contrib/tablesorter-master/jquery-latest.js"></script>
+      	<script type="text/javascript" src="contrib/tablesorter-master/jquery.tablesorter.js"></script>
+      	<script type="text/javascript" src="contrib/tablesorter-master/js/chili/chili-1.8b.js"></script>
+      	<script type="text/javascript" src="contrib/tablesorter-master/js/docs.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+        	// call the tablesorter plugin
+        	$("table").tablesorter({
+        		// sort on the first column, order asc
+        		sortList: [[0,0]],
+            widgets: ['zebra']
+        	});
+        });
+      	</script>
+</head>
+<body>
+<h2>Dashboard of ISMRM MR Hub GitHub Stats</h2>
+<table id="github_stats" border="1" class="tablesorter"></table>
+
+
+<script type="text/javascript">
+
+  jQuery('#github_stats').html('<thead><tr><th>Created</th><th>Repository</th><th>Forks</th><th>Watchers</th><th>Stars</th><th>Downloads</th></tr></thead><tbody>');
+
+  var idx_row = 0;
+  var repo_name = [];
+  var created_at = [];
+  var forks_count = [];
+  var watchers_count = [];
+  var stargazers_count = [];
+  var assets_total_download_count = [];
+  var github_url = '';
+  var json_url = 'https://raw.githubusercontent.com/welcheb/github_stats_json/master/ismrm_mr_hub.json';
+  var data = null;
+
+  $.ajax({
+      url: json_url,
+      async: false, // important!
+      dataType: 'json',
+      success: function( d ) {
+        data = d;
+        console.log( 'JSON SUCCESS: ' + json_url);
+      },
+      error: function( d ) {
+        console.log( 'JSON ERROR: ' + json_url + ' ' + d.message );
+      }
+    });
+
+  if (data !== null) {
+    for(var repo in data.repos) {
+
+      repo_name[idx_row] = repo;
+      created_at[idx_row] = data.repos[repo].created_at.substring(0, 10);
+      forks_count[idx_row] = data.repos[repo].forks_count;
+      watchers_count[idx_row] = data.repos[repo].watchers_count;
+      stargazers_count[idx_row] = data.repos[repo].stargazers_count;
+      assets_total_download_count[idx_row] = data.repos[repo].assets_total_download_count;
+
+      github_url = 'https://www.github.com/' + repo_name[idx_row];
+
+      jQuery('#github_stats').append('<tr>' +
+      '<td>' + created_at[idx_row] + '</td>' +
+      '<td>' + '<a target="_blank" href="' + github_url + '">' + repo_name[idx_row] + '</a></td>' +
+      '<td>' + forks_count[idx_row] + '</td>' +
+      '<td>' + watchers_count[idx_row] + '</td>' +
+      '<td>' + stargazers_count[idx_row] + '</td>' +
+      '<td>' + assets_total_download_count[idx_row] + '</td>' +
+      '</tr>');
+
+      console.log( 'idx_row = ' + idx_row + ' repo_name: ' + repo );
+
+      // increment idx_row
+      idx_row++;
+    }
+
+    jQuery('#github_stats').append('<tfoot><tr>' +
+    '<td>' + Array.from(new Set(created_at)).length + '</td>' +
+    '<td>' + Array.from(new Set(repo_name)).length + '</td>' +
+    '<td>' + forks_count.reduce(function(a, b){return a+b;}) + '</td>' +
+    '<td>' + watchers_count.reduce(function(a, b){return a+b;}) + '</td>' +
+    '<td>' + stargazers_count.reduce(function(a, b){return a+b;}) + '</td>' +
+    '<td>' + assets_total_download_count.reduce(function(a, b){return a+b;}) + '</td>' +
+    '</tr></tfoot></tbody>');
+
+  }
+  else {
+    console.log( 'DATA ERROR: data is null');
+  }
+
+</script>
+
+</body>
+</html>
