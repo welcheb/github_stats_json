@@ -89,8 +89,8 @@
     '<td>' + watchers_count.reduce(function(a, b){return a+b;}) + '</td>' +
     '<td>' + stargazers_count.reduce(function(a, b){return a+b;}) + '</td>' +
     '<td>' + assets_total_download_count.reduce(function(a, b){return a+b;}) + '</td>' +
-    '</tr></tfoot></tbody>');
-
+    '</tr></tfoot></tbody>' +
+    '<caption>Last Updated: ' + data['_request_time_gmt'] + ' GMT</caption>');
   }
   else {
     console.log( 'DATA ERROR: data is null');
