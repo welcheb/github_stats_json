@@ -1,20 +1,20 @@
 {
-    "_request_time_gmt": "2016-06-26 05:20:53", 
+    "_request_time_gmt": "2016-06-26 07:45:47", 
     "rate": {
         "limit": 5000, 
-        "remaining": 5000, 
-        "reset": 1466922053
+        "remaining": 4979, 
+        "reset": 1466929663
     }, 
     "resources": {
         "core": {
             "limit": 5000, 
-            "remaining": 5000, 
-            "reset": 1466922053
+            "remaining": 4979, 
+            "reset": 1466929663
         }, 
         "search": {
             "limit": 30, 
             "remaining": 30, 
-            "reset": 1466918513
+            "reset": 1466927207
         }
     }
 }
